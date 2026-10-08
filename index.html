@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10141b">
+  <title>Chessscope — Game Analysis</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css?v=3">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">♞</span><span>chess<span class="brand-accent">scope</span><small>ANALYSIS STUDIO</small></span></div>
+      <div class="sidebar-label">WORKSPACE</div>
+      <button class="nav-item active" id="nav-analysis"><span class="nav-icon">▦</span> Game analysis <span class="nav-dot"></span></button>
+      <button class="nav-item" id="nav-play"><span class="nav-icon">♞</span> Play Stockfish</button>
+      <button class="nav-item" id="nav-study"><span class="nav-icon">✧</span> Opening & tactics lab</button>
+      <button class="nav-item" id="nav-import"><span class="nav-icon">♟</span> Import Game</button>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">YOUR GAME</div>
+      <div class="game-mini"><span class="mini-icon">♔</span><div><strong id="sidebar-game">No game loaded</strong><span id="sidebar-date">Paste a PGN to start</span></div></div>
+      <div class="sidebar-bottom"><div class="engine-status"><span class="status-pulse"></span><div><strong>Stockfish 19</strong><span>Local engine connected</span></div></div><p>Private by design. Your games stay on this computer.</p></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="current-page-name">Game analysis</strong></div><div class="top-actions"><span class="engine-pill"><span class="pill-dot"></span> STOCKFISH 19</span><button class="top-import" id="header-import">＋ <span>New analysis</span></button></div></header>
+      <div class="content">
+        <nav class="mobile-page-nav" aria-label="Workspace pages"><button data-page="analysis" class="active">Analysis</button><button data-page="play">Play engine</button><button data-page="study">Train</button></nav>
+        <div id="analysis-view" class="page-view">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> ANALYSIS / GAME REVIEW</div><h1>Every move has a story<span>.</span></h1><p>Find the turning points, understand your decisions, and play better next time.</p></div><div class="heading-actions"><button class="share-button hidden" id="save-game" title="Save this game to your browser library">♡ <span>Save</span></button><button class="share-button hidden" id="download-pgn" title="Download this game as a .pgn file">↓ <span>Save .pgn</span></button><button class="share-button hidden" id="copy-pgn" title="Copy loaded PGN">↗ <span>Copy PGN</span></button></div></div>
+
+        <section class="analysis-empty" id="analysis-empty"><div class="analysis-empty-icon">♞</div><div class="analysis-empty-copy"><div class="eyebrow small">YOUR GAME STARTS HERE</div><h2>Upload your PGN to begin.</h2><p>Paste a game or choose a .pgn file. Your players, moves, and review will appear here.</p></div><button class="primary-button" id="empty-import" type="button">↥ Upload or paste PGN</button></section>
+
+        <section class="match-banner hidden" id="match-banner"><div class="match-player"><div class="avatar white-avatar">♔</div><div><span class="player-caption">WHITE</span><strong id="white-name">White player</strong><small id="white-elo">—</small></div></div><div class="match-center"><div class="match-score" id="result">Players from PGN</div><div class="match-meta" id="game-meta">Ready for analysis</div></div><div class="match-player black-player"><div><span class="player-caption">BLACK</span><strong id="black-name">Black player</strong><small id="black-elo">—</small></div><div class="avatar black-avatar">♚</div></div></section>
+
+        <div class="opening-identity hidden" id="analysis-opening"><span>OPENING &amp; VARIATION</span><strong id="analysis-opening-name">Opening not identified</strong><small id="analysis-variation-name">Main line</small></div>
+
+        <div class="workspace-grid">
+          <section class="board-column">
+            <div class="board-toolbar"><div class="toolbar-label"><span class="toolbar-spark">✦</span> LIVE BOARD <span class="toolbar-divider">/</span> <span id="move-indicator">Starting position</span></div><div class="board-tools"><button class="icon-button" id="board-theme" title="Switch to wooden board" aria-label="Switch to wooden board">▦</button><button class="icon-button sound-toggle" id="sound-toggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="true">♫</button><button class="icon-button" id="flip-board" title="Flip board" aria-label="Flip board">⟳</button></div></div>
+            <div class="board-frame"><div class="eval-rail"><div class="eval-rail-black" id="eval-fill"></div><span id="eval-rail-text">0.0</span></div><div class="board-container classic"><div class="board" id="board"></div><svg class="board-arrows" id="board-arrows" viewBox="0 0 800 800" aria-hidden="true"></svg><div class="move-toast" id="move-toast" aria-live="polite"></div></div></div>
+            <div class="playback"><button id="first-move" title="First move">|‹</button><button id="prev-move" title="Previous move">‹</button><button class="play-main" id="toggle-play" title="Play moves">▶</button><button id="next-move" title="Next move">›</button><button id="last-move" title="Last move">›|</button><div class="playback-divider"></div><span id="playback-count">Move 0 of 0</span><span class="key-hint">← → to navigate</span></div>
+            <div class="board-note" id="board-note"><span>✦</span><div><strong>Welcome to the analysis board</strong><p>Import a PGN to see every move, from the first opening idea to the final position.</p></div></div>
+          </section>
+
+          <section class="review-column">
+            <div class="review-card"><div class="card-heading"><div><div class="eyebrow small">GAME REVIEW</div><h2>The bigger picture</h2></div><span class="card-heading-icon">✦</span></div><div class="accuracy-row"><div class="accuracy-item"><div class="accuracy-avatar white">♔</div><div><span>WHITE ACCURACY <em>EST.</em></span><strong id="white-accuracy">—</strong></div></div><div class="accuracy-separator"></div><div class="accuracy-item"><div class="accuracy-avatar black">♚</div><div><span>BLACK ACCURACY <em>EST.</em></span><strong id="black-accuracy">—</strong></div></div></div><div class="chart-head"><strong>Evaluation over time</strong><span>White advantage ↑</span></div><div class="chart-wrap"><div class="chart-labels"><span>+5</span><span>0</span><span>−5</span></div><svg id="eval-chart" viewBox="0 0 500 120" preserveAspectRatio="none" aria-label="Evaluation chart"></svg></div><div class="chart-footer"><span>START</span><span id="chart-progress">Waiting for engine</span><span>END</span></div></div>
+            <div class="moves-card"><div class="moves-header"><div><div class="eyebrow small">MOVE BY MOVE</div><h2>Game timeline</h2></div><div class="moves-count" id="moves-count">0 MOVES</div></div><div class="tab-bar"><button class="tab active" id="tab-moves">Moves</button><button class="tab" id="tab-coach">Coach</button><button class="tab" id="tab-info">Info</button><button class="tab" id="tab-openings">Openings</button></div><div class="timeline-opening" id="timeline-opening">Opening appears after you import a game.</div><div class="moves-list" id="moves-list"></div><div class="insights-list hidden" id="coach-list"></div><div class="insights-list hidden" id="info-list"></div><div class="insights-list hidden" id="openings-list"></div><div class="classification-key"><span><i class="key-dot brilliant"></i> Brilliant</span><span><i class="key-dot great"></i> Great</span><span><i class="key-dot best"></i> Best</span><span><i class="key-dot mistake"></i> Mistake</span><span><i class="key-dot blunder"></i> Blunder</span></div></div>
+          </section>
+        </div>
+        <div class="footer-note">CHESSSCOPE <span>·</span> POWERED BY YOUR LOCAL STOCKFISH ENGINE <span>·</span> BUILT FOR THE LOVE OF THE GAME</div>
+        </div>
+
+        <section id="play-view" class="page-view hidden">
+          <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> PLAY / STOCKFISH</div><h1>Your next opponent<span>.</span></h1><p>Set the engine rating, choose your color, and play a full game with focused hints.</p></div></div>
+          <div class="training-grid">
+            <div class="training-main"><div class="training-board-top"><div class="board-side"><strong id="play-opponent">Stockfish 1500</strong><span id="clock-top" class="clock-chip hidden"></span></div><span id="play-status">Choose your settings and start a game.</span></div><div class="opening-identity play-opening" id="play-opening"><span>OPENING &amp; VARIATION</span><strong id="play-opening-name">Starting position</strong><small id="play-variation-name">The name will update as you play</small></div><div class="play-board-frame"><div class="eval-rail"><div class="eval-rail-black" id="play-eval-fill"></div><span id="play-eval-text">0.0</span></div><div class="board-container classic training-board-container"><div class="board interactive-board" id="play-board"></div></div></div><div class="training-board-bottom"><div class="board-side"><button id="play-flip" class="secondary-button">⟳ Flip board</button><span id="clock-bottom" class="clock-chip hidden"></span></div><span>Tap a piece and square, or drag a piece to move.</span></div></div>
+            <div class="training-side"><div class="training-panel"><div class="eyebrow small">NEW GAME</div><h2>Play Stockfish</h2><label class="field-label" for="elo-range">Engine rating <strong id="elo-value">1500</strong></label><input id="elo-range" type="range" min="1320" max="3190" step="10" value="1500"><div class="range-labels"><span>1320</span><span>3190</span></div><div class="segmented" id="play-color"><button data-color="w" class="active">Play White</button><button data-color="b">Play Black</button></div><div class="field-label tc-label">Time control</div><div class="tc-dropdown" id="time-control-wrap"><button type="button" id="time-control-button" class="text-input tc-button"><span id="time-control-label">Casual · no clock</span><span class="tc-chevron">▾</span></button><div id="time-control-menu" class="tc-menu hidden"></div></div><button id="start-game" class="primary-button">Start new game →</button></div><div class="training-panel"><div class="eyebrow small">THINKING ROUTINE</div><h2>Find your move</h2><p class="coach-copy" id="play-coach">Before moving: check forcing moves, count undefended pieces, and ask what your opponent threatens.</p><div class="coach-actions"><button id="thinking-hint" class="secondary-button">Give me a clue</button><button id="engine-hint" class="secondary-button">Show best move</button></div><div id="hint-result" class="hint-result hidden"></div></div><div class="training-panel play-moves-panel"><div class="eyebrow small">SCORE SHEET</div><h2>Moves played</h2><div id="play-moves" class="play-moves"><div class="empty-list">Your game will appear here.</div></div><button id="analyze-play-game" class="secondary-button hidden">Analyze this game →</button></div></div>
+          </div>
+        </section>
+
+        <section id="study-view" class="page-view hidden">
+          <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> TRAIN / GET SHARPER</div><h1>Build better instincts<span>.</span></h1><p>Learn the plans behind common openings, then practice spotting forcing moves.</p></div></div>
+          <div class="study-tabs"><button id="study-openings-tab" class="active">Opening lab</button><button id="study-tactics-tab">Tactics lab</button></div>
+          <div id="opening-lab" class="study-section"><div class="training-grid"><div class="training-main"><div class="training-board-top"><strong id="opening-board-title">Choose an opening</strong><span id="opening-board-status">Study a line, then test your memory.</span></div><div class="board-container classic training-board-container"><div class="board interactive-board" id="opening-board"></div></div><div class="training-board-bottom step-controls"><button id="opening-prev" class="secondary-button">← Previous</button><span id="opening-step">Starting position</span><button id="opening-next" class="secondary-button">Next →</button></div></div><div class="training-side"><div class="training-panel"><div class="eyebrow small">OPENING EXPLORER</div><h2>Learn the ideas</h2><input id="opening-search" class="text-input" type="search" placeholder="Search 21 opening lines…"><div class="opening-filters"><button data-side="all" class="active">All</button><button data-side="white">White</button><button data-side="black">Black</button></div><div id="opening-catalog" class="opening-catalog"></div></div><div class="training-panel" id="opening-detail"><div class="empty-list">Select an opening to see its plan and practice its moves.</div></div></div></div></div>
+          <div id="tactics-lab" class="study-section hidden"><div class="training-grid"><div class="training-main"><div class="training-board-top"><strong id="tactic-title">Tactics challenge</strong><span id="tactic-status">Find the strongest move.</span></div><div class="board-container classic training-board-container"><div class="board interactive-board" id="tactic-board"></div></div><div class="training-board-bottom step-controls"><button id="tactic-prev" class="secondary-button">← Previous</button><span id="tactic-counter">Puzzle 1</span><button id="tactic-next" class="secondary-button">Next →</button></div></div><div class="training-side"><div class="training-panel"><div class="eyebrow small">TACTICAL VISION</div><h2 id="tactic-prompt">Find the move</h2><p class="coach-copy" id="tactic-description"></p><div id="tactic-feedback" class="hint-result">Select a piece and play your candidate move.</div><div class="coach-actions"><button id="tactic-hint" class="secondary-button">Hint</button><button id="tactic-reveal" class="secondary-button">Reveal answer</button></div></div><div class="training-panel"><div class="eyebrow small">EVERY MOVE</div><h2>The tactical scan</h2><ol class="thinking-list"><li>What changed after your opponent’s move?</li><li>List checks, captures, and direct threats.</li><li>Find loose pieces and exposed kings.</li><li>Calculate forcing replies before you commit.</li><li>Check your intended move for a simple refutation.</li></ol></div></div></div></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="promo-picker" class="promo-picker hidden" role="dialog" aria-label="Choose promotion piece"></div>
+  <dialog id="import-dialog"><form method="dialog" class="modal"><div class="modal-top"><div class="modal-icon">♞</div><button class="close-button" value="cancel" aria-label="Close">×</button></div><div class="eyebrow small">NEW ANALYSIS</div><h2>Bring your game to life.</h2><p>Paste a PGN, pull recent games from your Chess.com username (public games, no login), upload a file, or reopen a saved game.</p><div class="import-tabs"><button type="button" data-import-tab="paste" class="active">Paste PGN</button><button type="button" data-import-tab="chesscom">Chess.com</button><button type="button" data-import-tab="saved">Saved <span id="saved-count">0</span></button></div><div id="import-pane-paste"><textarea id="pgn-input" spellcheck="false" placeholder='[Event "My game"]&#10;[White "You"]&#10;[Black "Opponent"]&#10;&#10;1. e4 e5 2. Nf3 Nc6 3. Bc4 ...'></textarea><div class="modal-bottom"><label class="upload-button">↥ Upload .pgn<input id="pgn-file" type="file" accept=".pgn,.txt" hidden></label><button type="button" id="analyze-button">Analyze game <span>→</span></button></div></div><div id="import-pane-chesscom" class="hidden"><div class="chesscom-row"><input id="chesscom-username" class="text-input" type="text" placeholder="Chess.com username (e.g. hikaru)" autocomplete="off" spellcheck="false"><button type="button" id="chesscom-fetch" class="primary-button">Get games →</button></div><div id="chesscom-list" class="import-list"><div class="empty-list">Type a username above to list recent games.</div></div></div><div id="import-pane-saved" class="hidden"><div id="saved-list" class="import-list"><div class="empty-list">No saved games yet. Analyze a game, then press Save.</div></div></div><div class="modal-error" id="modal-error"></div></form></dialog>
+  <script>
+    (() => {
+      const names = {analysis:'Game analysis',play:'Play Stockfish',study:'Opening & tactics lab'};
+      window.chessscopeShowPage = page => {
+        if (!names[page]) return;
+        for (const name of Object.keys(names)) {
+          document.getElementById(`${name}-view`).classList.toggle('hidden',name!==page);
+          document.getElementById(`nav-${name}`).classList.toggle('active',name===page);
+          document.querySelector(`.mobile-page-nav [data-page="${name}"]`)?.classList.toggle('active',name===page);
+        }
+        document.getElementById('current-page-name').textContent=names[page];
+        window.scrollTo({top:0,behavior:'smooth'});
+      };
+      for (const page of Object.keys(names)) document.getElementById(`nav-${page}`).addEventListener('click',()=>window.chessscopeShowPage(page));
+      document.querySelector('.mobile-page-nav').addEventListener('click',event=>{const button=event.target.closest('[data-page]');if(button)window.chessscopeShowPage(button.dataset.page)});
+      for (const id of ['nav-import','header-import']) document.getElementById(id).addEventListener('click',()=>window.chessscopeShowPage('analysis'));
+      const initial='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+      const symbols={K:'♔',Q:'♕',R:'♖',B:'♗',N:'♘',P:'♙',k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'};
+      const seedBoard=(id,placement)=>{
+        const pieces=[];
+        for(const char of placement.replaceAll('/','')) if(/[1-8]/.test(char)) pieces.push(...Array(Number(char)).fill('')); else pieces.push(char);
+        document.getElementById(id).innerHTML=pieces.map((piece,i)=>{
+          const x=i%8,y=Math.floor(i/8),rank=i%8===0?`<span class="coordinate rank">${8-y}</span>`:'',file=y===7?`<span class="coordinate file">${'abcdefgh'[x]}</span>`:'';
+          return `<div class="square ${(x+y)%2?'dark':'light'}" data-square="${'abcdefgh'[x]}${8-y}">${rank}${piece?`<span class="piece-fallback ${piece===piece.toUpperCase()?'white':'black'}">${symbols[piece]}</span>`:''}${file}</div>`;
+        }).join('');
+      };
+      for(const id of ['board','play-board','opening-board'])seedBoard(id,initial);
+      seedBoard('tactic-board','2q1k3/8/8/5N2/8/8/8/6K1');
+      window.chessscopeTrainingFailed = () => {
+        if (window.chessscopeTrainingReady) return;
+        document.getElementById('play-status').textContent='The app script did not load. Refresh this page or restart the Chessscope server.';
+        document.getElementById('opening-board-status').textContent='The app script did not load. Refresh this page or restart the Chessscope server.';
+      };
+    })();
+  </script>
+  <script type="module" src="/app.js?v=3" onerror="window.chessscopeTrainingFailed()"></script>
+</body>
+</html>
